@@ -1,0 +1,54 @@
+--- SQL MOVIE RATING QUERY EXERCISES
+
+1.select title from Movie where director = 'Steven Spielberg'
+
+2. select distinct a.year from movie a join rating b on a.mID = b.mID where b.stars >= 4 order by a.year 
+
+3.select distinct title from movie where mID not in (select distinct mID from rating)  
+
+4.select a.name from reviewer a join rating b on a.rID = b.rID where b.ratingdate is null
+
+5. select b.name, c.title, a.stars, a.ratingdate from rating a join reviewer b on a.rID = b.rID join movie c on a.mID = c.mID order by b.name, c.title , a.stars
+
+6.select f.name, g.title from (select a.rID, a.mID, a.stars, a.ratingdate from 
+(select distinct rID, mID, stars, ratingdate from rating order by rID, mID, stars, ratingdate desc) a 
+join rating b on a.rID = b.rID and a.mID = b.mID where a.stars > b.stars and a.ratingdate > b.ratingdate) h join reviewer f on h.rID = f.rID
+join movie g on g.mID = h.mID
+
+7.select b.title, a.stars from (select mID, max(stars) as stars from rating group by mID) a join movie b on a.mID = b.mID order by title
+
+8.select b.title, (a.max_stars-a.min_stars) as rating_spread from (select mID, max(stars) as max_stars , min(stars) as min_stars from rating group by mID) a 
+join movie b on a.mID = b.mID order by rating_spread desc, title 
+
+9.select max(averg) - min(averg) from (select g.year, avg(average) as averg from (select a.mID, avg(a.stars) average , CASE when b.year < 1980 then 'less than 1980' 
+                                          when b.year > 1980 then 'after 1980' 
+                                          else null END as year from rating a join movie b on a.mID = b.mID group by a.mID) g group by year)
+                                          
+                                          
+                                          
+-------------- SQL MOVIE RATING QUERY EXERCISES EXTRAS
+
+1.select distinct a.name from 
+reviewer a 
+join rating b 
+on a.rID = b.rID
+join movie c
+on b.mID = c.mID 
+where c.title = 'Gone with the Wind'
+
+2.select g.name, g.title, g.stars from (select a.*, b.name, c.title, c.director from 
+rating a
+join reviewer b
+on a.rID = b.rID
+join movie c
+on a.mID = c.mID
+where b.name = c.director)g
+
+3.SELECT name as List FROM reviewer
+UNION
+SELECT title as List From movie
+order by name,title
+
+4.select a.title from movie a where a.mID not in (select distinct b.mID from rating b join reviewer c on b.rID = c.rID where c.name = 'Chris Jackson')
+
+5.
