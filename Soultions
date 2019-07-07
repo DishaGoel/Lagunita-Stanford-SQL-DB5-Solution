@@ -52,3 +52,16 @@ order by name,title
 4.select a.title from movie a where a.mID not in (select distinct b.mID from rating b join reviewer c on b.rID = c.rID where c.name = 'Chris Jackson')
 
 5.
+
+6.select distinct a.name, b.title, g.stars from 
+( select distinct mID, rID , stars from rating where stars = (select min(stars) from rating)) g
+join
+reviewer a 
+on a.rID = g.rID
+join movie b
+on g.mID = b.mID
+
+
+7.select a.title, avg(b.stars) average from rating b join movie a on a.mID = b.mID group by b.mID order by average desc, a.title
+
+8. select distinct a.name from reviewer a join rating b on a.rID = b.rID where b.rID in ( select rID from rating group by rID having count(*) >=3)
