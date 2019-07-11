@@ -67,3 +67,6 @@ on g.mID = b.mID
 8. select distinct a.name from reviewer a join rating b on a.rID = b.rID where b.rID in ( select rID from rating group by rID having count(*) >=3)
 
 9.select title, director from movie where director in (select director from movie group by director having count(mID) > 1) order by director, title
+
+10.select b.title, a.average from  (select mID, avg(stars) average from rating where stars is not null group by mID order by avg(stars) desc limit 1) a
+join movie b on a.mID = b.mID
